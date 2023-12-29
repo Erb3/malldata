@@ -1,0 +1,81 @@
+@import './tailwind.css';
+
+html,
+body,
+#app {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0;
+  font-weight: normal;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --white: #ffffff;
+  --white-soft: #f8f8f8;
+  --white-mute: #f2f2f2;
+  --black: #181818;
+  --black-soft: #222222;
+  --black-mute: #282828;
+
+  --primary: #525ceb;
+  --primary-raised: #555ff0;
+  --secondary: #739072;
+  --secondary-raised: #769475;
+
+  --divider-light-1: rgba(60, 60, 60, 0.29);
+  --divider-light-2: rgba(60, 60, 60, 0.12);
+  --divider-dark-1: rgba(84, 84, 84, 0.65);
+  --divider-dark-2: rgba(84, 84, 84, 0.48);
+  --text-light: #213547;
+  --text-dark: rgba(255, 255, 255, 0.94);
+  --radius: 8px;
+}
+
+:root {
+  --color-background: var(--white);
+  --color-raised: var(--white-soft);
+  --color-border: var(--divider-light-2);
+  --color-border-hover: var(--divider-light-1);
+  --color-text: var(--text-light);
+  --section-gap: 160px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--black);
+    --color-raised: var(--black-soft);
+    --color-border: var(--divider-dark-2);
+    --color-border-hover: var(--divider-dark-1);
+    --color-text: var(--text-dark);
+  }
+}
