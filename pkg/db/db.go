@@ -2,12 +2,11 @@ package db
 
 import (
 	"database/sql"
-	"log"
 
+	"github.com/charmbracelet/log"
 	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/Pixium/MallData/pkg/types"
-	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
 var (
@@ -23,34 +22,46 @@ func SetupDatabase() (*sql.DB, error) {
 
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS plots(
-			id     TEXT NOT NULL PRIMARY KEY,
-			startX INT  NOT NULL,
-			startZ INT  NOT NULL,
-			endX   INT  NOT NULL,
-			endZ   INT  NOT NULL
-		);
-	`)
+			id                 TEXT NOT NULL PRIMARY KEY,
+			name               TEXT NOT NULL,
+			startX             INT  NOT NULL,
+			startZ             INT  NOT NULL,
+			endX               INT  NOT NULL,
+			endZ               INT  NOT NULL,
+			ownerDiscordId     TEXT NOT NULL,
+			ownerMinecraftUuid TEXT NOT NULL,
+			ownerMinecraftName TEXT,
+			software           TEXT,
+			notes              TEXT
+		);`)
 
 	if err != nil {
 		return nil, err
 	}
 
-	log.Print("Successfully initiated database!")
+	log.Info("Successfully initiated database!")
 
 	DB = db
 	return db, nil
 }
 
-func InsertPlot(plot *types.Plot) (string, error) {
-	id, err := gonanoid.New(7)
+func GetPlots() ([]types.Plot, error) {
+	rows, err := DB.Query("SELECT * FROM plots")
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	_, err = DB.Exec("INSERT INTO plots(id, startX, startZ, endX, endZ) values(?, ?, ?, ?, ?)", id, plot.Corner1[0], plot.Corner1[1], plot.Corner2[0], plot.Corner2[1])
-	if err != nil {
-		return "", err
+	var plots []types.Plot
+
+	for rows.Next() {
+		var plot types.Plot
+
+		if err := rows.Scan(&plot.Id, &plot.Name, &plot.StartX, &plot.StartZ, &plot.EndX, &plot.EndZ, &plot.OwnerDiscordId, &plot.OwnerMinecraftUuid, &plot.OwnerMinecraftName, &plot.Software, &plot.NotesRaw); err != nil {
+			return nil, err
+		}
+
+		plots = append(plots, plot)
 	}
 
-	return id, nil
+	return plots, nil
 }
